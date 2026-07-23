@@ -1,6 +1,6 @@
 from typing import TypedDict
 from langgraph.graph import StateGraph, MessagesState, START, END
-from langchain_core.messages import AIMessage 
+from langchain_core.messages import AIMessage, HumanMessage 
 from langchain.chat_models import init_chat_model
 import random, os
 from dotenv import load_dotenv
@@ -27,6 +27,10 @@ def node_1(state: State) -> None:
         new_state["my_age"] = random.randint(18, 99)
 
     history = state.get("messages", [])
+    if not history:
+        history = [
+            HumanMessage(content="Hola")
+        ]
     ai_message = llm.invoke(history)
     new_state["messages"] = [ai_message]
     print(new_state)
